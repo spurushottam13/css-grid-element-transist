@@ -10,11 +10,11 @@
         background: #efefef;
       }
       th {
-        padding: 2rem;
+        padding: 1.5rem;
       }
-      .container{
+      .container {
         display: flex;
-    justify-content: space-evenly;
+        justify-content: space-evenly;
       }
     </style>
   </head>
@@ -22,17 +22,26 @@
     <center>
       <h2>@sp13.GETA (Grid Element Transit Algorithm)</h2>
       <br />
-
-        <pre>
+      <pre>
         <code> A represent => Element </code> 
         <code> 1 represent => DDE (Design Default Empty) Cell</code> 
         <code>0 represent => PCE (Param Config Empty) Cell</code> 
-        </pre>
-      </code>
+      </pre>
+
+      <button id="button">Transit Element</button>
       <br />
-      <table border="1" cellpadding="3" id="gridArea">
-        <table border="1" cellpadding="3" id="gridArea"><tr><th>A</th><th>A</th><th>A</th><th style="background: red;">0</th><th>A</th><th style="background: cadetblue;">1</th><th style="background: cadetblue;">1</th></tr><tr><th style="background: red;">0</th><th style="background: red;">0</th><th>A</th><th>A</th><th>A</th><th style="background: red;">0</th><th style="background: cadetblue;">1</th></tr><tr><th style="background: cadetblue;">1</th><th style="background: cadetblue;">1</th><th style="background: cadetblue;">1</th><th>A</th><th style="background: red;">0</th><th style="background: red;">0</th><th style="background: cadetblue;">1</th></tr><tr><th>A</th><th style="background: red;">0</th><th>A</th><th>A</th><th style="background: cadetblue;">1</th><th style="background: cadetblue;">1</th><th>A</th></tr><tr><th>A</th><th style="background: cadetblue;">1</th><th style="background: cadetblue;">1</th><th style="background: cadetblue;">1</th><th>A</th><th style="background: cadetblue;">1</th><th style="background: red;">0</th></tr></table>
-      </table>
+      <br />
+
+      <div class="container">
+        <div>
+          <p><center>INPUT</center></p>
+          <table border="1" cellpadding="3" id="gridArea-input"></table>
+        </div>
+        <div>
+          <p><center>OUTPUT</center></p>
+          <table border="1" cellpadding="3" id="gridArea-output"></table>
+        </div>
+      </div>
     </center>
     <script type="module" src="app.js"></script>
   </body>
