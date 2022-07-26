@@ -1,4 +1,3 @@
-import { getRandomEntry } from "./utils.js";
 import { createRow, createRowFromValues } from "./render.js";
 
 const tableInput = document.querySelector("#gridArea-input");
@@ -8,40 +7,21 @@ const btnEl = document.querySelector("#button");
 const isDDE = (input) => typeof input === "string" && input.includes("1");
 const isPCE = (input) => typeof input === "string" && input.includes("0");
 
-
-const rowArray = [];
-function populateTable() {
-  tableInput.innerHTML = "";
-
-  Array.from(Array(5))
-    .map(Boolean)
-    .forEach((_) => {
-      const { tr, values } = createRow();
-      rowArray.push(values);
-      tableInput.appendChild(tr);
-    });
-}
-
-populateTable();
-
 function checkForAdjacent(cells, zeroIndex) {
-  if (cells[zeroIndex + 1] === "0") return true;
-  if (zeroIndex === cells.length - 1) return true;
-  console.log({ zeroIndex, cells });
-  return isDDE(cells[zeroIndex - 1] || isDDE(cells[zeroIndex + 1])
+  return isDDE(cells[zeroIndex - 1]) || isDDE(cells[zeroIndex + 1]);
 }
 
 function getMovingDirection(arr, zeroIndex) {
   let leftDistance;
   let rightDistance;
   for (let rightSteps = zeroIndex; rightSteps < arr.length; rightSteps++) {
-    if (arr[rightSteps] === "1") {
+    if (isDDE(arr[rightSteps])) {
       rightDistance = rightSteps - zeroIndex;
       break;
     }
   }
   for (let leftStep = zeroIndex; leftStep > 0; leftStep--) {
-    if (arr[leftStep] === "1") {
+    if (isDDE(arr[leftStep])) {
       leftDistance = zeroIndex - leftStep;
       break;
     }
@@ -52,18 +32,40 @@ function getMovingDirection(arr, zeroIndex) {
   if (leftDistance <= rightDistance) return "LEFT";
   return true;
 }
-let maxAttemp = 3;
+
+const reducedArray = (arr) =>
+  arr
+    .map((item, index) => {
+      const nextValue = arr[index + 1];
+      if (nextValue && nextValue.includes(item)) {
+        arr[index + 1] = undefined;
+        return item + nextValue;
+      }
+      return item;
+    })
+    .filter(Boolean);
+
+const expandArray = (arr) =>
+  arr
+    .map((item) => {
+      if (item.length > 1) {
+        return item.split("");
+      }
+      return item;
+    })
+    .flat();
+
 function reflowRow(...cells) {
-  if (maxAttemp > 5) throw new Error("knksd");
-  maxAttemp += 1;
-  console.log("InputCells", cells);
-  if (cells.includes("0") === false) {
+  console.log("Input", cells);
+  cells = reducedArray(cells);
+  console.log("Reflow", cells);
+  if (cells.filter(isPCE).length < 1) {
     console.log("No Zero");
-    return cells;
+    return expandArray(cells);
   }
   for (let i = 0; i < cells.length; i++) {
     const item = cells[i];
-    if (item === "0") {
+    if (isPCE(item)) {
       const isAdjacent = checkForAdjacent(cells, i);
       console.log({ isAdjacent, i });
       if (isAdjacent === false) {
@@ -84,11 +86,21 @@ function reflowRow(...cells) {
       }
     }
   }
-  console.log("Output", cells);
-  return cells;
+  console.log("Output", expandArray(cells));
+  return expandArray(cells);
 }
 
-btnEl.onclick = function () {
+function populateTable() {
+  const rowArray = [];
+  tableOutput.innerHTML = "";
+  tableInput.innerHTML = "";
+  Array.from(Array(5))
+    .map(Boolean)
+    .forEach((_) => {
+      const { tr, values } = createRow();
+      rowArray.push(values);
+      tableInput.appendChild(tr);
+    });
   rowArray.forEach((rowItems, index) => {
     const result = reflowRow(...rowItems);
     console.groupCollapsed("Row no", index);
@@ -98,8 +110,11 @@ btnEl.onclick = function () {
     const { tr } = createRowFromValues(result);
     tableOutput.appendChild(tr);
   });
-};
+}
+btnEl.onclick = populateTable;
+populateTable();
 
-console.log(reflowRow(...["0", "1", "1", "A", "0", "0", "A"]));
+// console.log(reflowRow(...["0", "A", "A", "0", "A", "1", "1"]));
 
 // ['0', '1', '1', 'A', '0', '0', 'A'] => infinite
+// ['0',	'A',	'A','0'	,'A'	,'1',	'1'] => infinite

@@ -1,4 +1,5 @@
-function createRow() {
+import { getRandomEntry } from "./utils.js";
+export function createRow() {
   const tr = document.createElement("tr");
   const values = Array.from(Array(7)).map(getRandomEntry);
   values.forEach((cellItem) => {
@@ -11,7 +12,7 @@ function createRow() {
   return { tr, values };
 }
 
-function createRowFromValues(array) {
+export function createRowFromValues(array) {
   const tr = document.createElement("tr");
   array.forEach((cellItem) => {
     const th = document.createElement("th");
