@@ -16,6 +16,12 @@
         display: flex;
         justify-content: space-evenly;
       }
+      summary {
+        cursor: pointer;
+      }
+      details[open] {
+        margin-bottom: 2rem;
+      }
     </style>
   </head>
   <body>
@@ -23,13 +29,13 @@
       <h2>@sp13/GETA (Grid Element Transit Algorithm)</h2>
       <br />
       <pre>
-        <code> A represent => Element </code> 
-        <code> 1 represent => DDE (Design Default Empty) Cell</code> 
-        <code>0 represent => PCE (Param Config Empty) Cell</code> 
+        <code> <strong>A</strong> represent => Controls Element </code> 
+        <code> <strong>1</strong> represent => DDE (Design Default Empty) Cell, empty space in the design</code> 
+        <code><strong>0</strong> represent => PCE (Param Config Empty) Cell, empty spaces created by the config </code> 
       </pre>
 
       <div class="container">
-        <button id="button">Transit Element</button>
+        <button id="button">Repopulate Table</button>
       </div>
       <br />
       <br />
@@ -45,6 +51,62 @@
         </div>
       </div>
     </center>
+    <br />
+    <details>
+      <summary>Documentation</summary>
+      <code style="margin-bottom: 2rem">
+        <dl>
+          <dt>Motivation</dt>
+          <dd>- to arrange RED box (PCE) nearest to Blue box (DDE)</dd>
+          <dd><br /></dd>
+          <dt>Steps for individual Row</dt>
+          <dd>
+            - let the <i>array</i> be the array representing the each cell of
+            row
+          </dd>
+          <dd>
+            - i)&nbsp; &nbsp;reduce the <i>array</i> by merging the entity with
+            same nature into one, example: ['A', '1', '1' ,'0',] =>
+            ['A','11','0']
+          </dd>
+          <dd>
+            - ii)&nbsp; if the array does not contain any PCE ('0');
+            <strong>return</strong> the
+            <i>array</i>
+          </dd>
+          <dd>
+            <dl style="margin: 0px">
+              <dt>
+                - iv)&nbsp; start a loop over the <i>array</i> with a variable
+                <i>PCE<sub>i</sub></i> (i>0; i < <i>array</i>.length)
+              </dt>
+              <dd>
+                - a) if <i>PCE<sub>i</sub></i> <strong>NOT</strong> adjacent to
+                DDE, increment the <i>i</i>.
+              </dd>
+              <dd>
+                <dl style="margin: 0px">
+                  <dt>
+                    - b) if <i>PCE<sub>i</sub></i> adjacent to DDE
+                  </dt>
+                  <dd>
+                    - move <i>PCE<sub>i</sub></i> one unit in
+                    <i>direction</i> of the nearest DDE
+                  </dd>
+                  <dd>- repeat the steps iv)</dd>
+                </dl>
+              </dd>
+            </dl>
+          </dd>
+          <dd>
+            - vi) expand the <i>array</i> and let it be <i>expandedArray</i>
+          </dd>
+          <dd>- v)&nbsp; return <i>expandedArray</i></dd>
+          <dd><br /></dd>
+          <dt>Source Code: <a href="./algo.js" target="_blank">alog.js</a></dt>
+        </dl>
+      </code>
+    </details>
     <script type="module" src="app.js"></script>
   </body>
 </html>
